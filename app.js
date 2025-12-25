@@ -38,7 +38,13 @@ console.log(countCharacters("aabbcc"));`,
     }
   }
   return charCount;
-}`
+}`,
+        testCases: [
+            { input: ["hello"], expected: { h: 1, e: 1, l: 2, o: 1 } },
+            { input: ["aabbcc"], expected: { a: 2, b: 2, c: 2 } },
+            { input: [""], expected: {} },
+            { input: ["a"], expected: { a: 1 } }
+        ]
     },
     {
         id: 'two-sum',
@@ -69,7 +75,12 @@ Space Complexity: O(n)`,
 
 // Test cases
 console.log(twoSum([2,7,11,15], 9)); // Expected: [0,1]
-console.log(twoSum([3,2,4], 6)); // Expected: [1,2]`
+console.log(twoSum([3,2,4], 6)); // Expected: [1,2]`,
+        testCases: [
+            { input: [[2,7,11,15], 9], expected: [0,1] },
+            { input: [[3,2,4], 6], expected: [1,2] },
+            { input: [[3,3], 6], expected: [0,1] }
+        ]
     },
     {
         id: 'valid-anagram',
@@ -100,7 +111,13 @@ Space Complexity: O(1) - max 26 letters`,
 
 // Test cases
 console.log(isAnagram("anagram", "nagaram")); // Expected: true
-console.log(isAnagram("rat", "car")); // Expected: false`
+console.log(isAnagram("rat", "car")); // Expected: false`,
+        testCases: [
+            { input: ["anagram", "nagaram"], expected: true },
+            { input: ["rat", "car"], expected: false },
+            { input: ["", ""], expected: true },
+            { input: ["a", "ab"], expected: false }
+        ]
     },
     {
         id: 'reverse-string',
@@ -132,7 +149,12 @@ Space Complexity: O(1)`,
 // Test cases
 let test1 = ["h","e","l","l","o"];
 reverseString(test1);
-console.log(test1); // Expected: ["o","l","l","e","h"]`
+console.log(test1); // Expected: ["o","l","l","e","h"]`,
+        testCases: [
+            { input: [["h","e","l","l","o"]], expected: ["o","l","l","e","h"], modifiesInput: true },
+            { input: [["H","a","n","n","a","h"]], expected: ["h","a","n","n","a","H"], modifiesInput: true },
+            { input: [["a"]], expected: ["a"], modifiesInput: true }
+        ]
     },
     {
         id: 'contains-duplicate',
@@ -163,7 +185,13 @@ Space Complexity: O(n)`,
 
 // Test cases
 console.log(containsDuplicate([1,2,3,1])); // Expected: true
-console.log(containsDuplicate([1,2,3,4])); // Expected: false`
+console.log(containsDuplicate([1,2,3,4])); // Expected: false`,
+        testCases: [
+            { input: [[1,2,3,1]], expected: true },
+            { input: [[1,2,3,4]], expected: false },
+            { input: [[]], expected: false },
+            { input: [[1,1,1,1]], expected: true }
+        ]
     },
     {
         id: 'best-time-stock',
@@ -196,7 +224,13 @@ Space Complexity: O(1)`,
 
 // Test cases
 console.log(maxProfit([7,1,5,3,6,4])); // Expected: 5
-console.log(maxProfit([7,6,4,3,1])); // Expected: 0`
+console.log(maxProfit([7,6,4,3,1])); // Expected: 0`,
+        testCases: [
+            { input: [[7,1,5,3,6,4]], expected: 5 },
+            { input: [[7,6,4,3,1]], expected: 0 },
+            { input: [[2,4,1]], expected: 2 },
+            { input: [[1]], expected: 0 }
+        ]
     },
     {
         id: 'valid-palindrome',
@@ -229,7 +263,13 @@ Space Complexity: O(1)`,
 
 // Test cases
 console.log(isPalindrome("A man, a plan, a canal: Panama")); // Expected: true
-console.log(isPalindrome("race a car")); // Expected: false`
+console.log(isPalindrome("race a car")); // Expected: false`,
+        testCases: [
+            { input: ["A man, a plan, a canal: Panama"], expected: true },
+            { input: ["race a car"], expected: false },
+            { input: [""], expected: true },
+            { input: [" "], expected: true }
+        ]
     },
     {
         id: 'valid-parentheses',
@@ -265,7 +305,14 @@ Space Complexity: O(n)`,
 // Test cases
 console.log(isValid("()")); // Expected: true
 console.log(isValid("()[]{}")); // Expected: true
-console.log(isValid("(]")); // Expected: false`
+console.log(isValid("(]")); // Expected: false`,
+        testCases: [
+            { input: ["()"], expected: true },
+            { input: ["()[]{}"], expected: true },
+            { input: ["(]"], expected: false },
+            { input: ["([)]"], expected: false },
+            { input: ["{[]}"], expected: true }
+        ]
     }
 ];
 
@@ -441,6 +488,11 @@ function runCode() {
             });
         }
 
+        // Run automated tests if available
+        if (currentProblem && currentProblem.testCases) {
+            runTests();
+        }
+
         // Mark as completed
         if (currentProblem && !completedProblems.has(currentProblem.id)) {
             completedProblems.add(currentProblem.id);
@@ -462,6 +514,142 @@ function runCode() {
         // Restore console.log
         console.log = originalLog;
     }
+}
+
+// Run automated tests
+function runTests() {
+    if (!currentProblem || !currentProblem.testCases) return;
+
+    const consoleOutput = document.getElementById('console-output');
+    const code = document.getElementById('code-editor').value;
+    
+    // Add separator
+    const separator = document.createElement('div');
+    separator.className = 'console-line';
+    separator.style.borderTop = '2px solid var(--border-color)';
+    separator.style.marginTop = '10px';
+    separator.style.paddingTop = '10px';
+    separator.textContent = '🧪 Running Automated Tests...';
+    separator.style.fontWeight = 'bold';
+    consoleOutput.appendChild(separator);
+
+    let passedTests = 0;
+    let totalTests = currentProblem.testCases.length;
+
+    try {
+        // Extract function name from code
+        const functionMatch = code.match(/function\s+(\w+)\s*\(/);
+        if (!functionMatch) {
+            const errorLine = document.createElement('div');
+            errorLine.className = 'console-line error';
+            errorLine.textContent = '❌ No function found in code';
+            consoleOutput.appendChild(errorLine);
+            return;
+        }
+
+        const functionName = functionMatch[1];
+
+        // Execute code to define the function
+        eval(code);
+        const userFunction = eval(functionName);
+
+        // Run each test case
+        currentProblem.testCases.forEach((testCase, index) => {
+            try {
+                let result;
+                
+                // Handle functions that modify input (like reverseString)
+                if (testCase.modifiesInput) {
+                    const inputCopy = JSON.parse(JSON.stringify(testCase.input[0]));
+                    userFunction(...testCase.input);
+                    result = testCase.input[0];
+                    testCase.input[0] = inputCopy; // Restore for next run
+                } else {
+                    result = userFunction(...testCase.input);
+                }
+
+                const expected = testCase.expected;
+                const passed = deepEqual(result, expected);
+
+                const testLine = document.createElement('div');
+                testLine.className = `console-line ${passed ? 'success' : 'error'}`;
+                
+                if (passed) {
+                    passedTests++;
+                    testLine.textContent = `✓ Test ${index + 1} passed`;
+                } else {
+                    testLine.innerHTML = `✗ Test ${index + 1} failed<br>` +
+                        `   Input: ${formatValue(testCase.input)}<br>` +
+                        `   Expected: ${formatValue(expected)}<br>` +
+                        `   Got: ${formatValue(result)}`;
+                }
+                
+                consoleOutput.appendChild(testLine);
+            } catch (error) {
+                const testLine = document.createElement('div');
+                testLine.className = 'console-line error';
+                testLine.textContent = `✗ Test ${index + 1} error: ${error.message}`;
+                consoleOutput.appendChild(testLine);
+            }
+        });
+
+        // Summary
+        const summaryLine = document.createElement('div');
+        summaryLine.className = 'console-line';
+        summaryLine.style.fontWeight = 'bold';
+        summaryLine.style.marginTop = '10px';
+        
+        if (passedTests === totalTests) {
+            summaryLine.className = 'console-line success';
+            summaryLine.textContent = `🎉 All ${totalTests} tests passed!`;
+        } else {
+            summaryLine.className = 'console-line error';
+            summaryLine.textContent = `${passedTests}/${totalTests} tests passed`;
+        }
+        
+        consoleOutput.appendChild(summaryLine);
+
+    } catch (error) {
+        const errorLine = document.createElement('div');
+        errorLine.className = 'console-line error';
+        errorLine.textContent = `❌ Test setup error: ${error.message}`;
+        consoleOutput.appendChild(errorLine);
+    }
+}
+
+// Deep equality check for objects and arrays
+function deepEqual(a, b) {
+    if (a === b) return true;
+    
+    if (a == null || b == null) return false;
+    
+    if (typeof a !== 'object' || typeof b !== 'object') return false;
+    
+    const keysA = Object.keys(a);
+    const keysB = Object.keys(b);
+    
+    if (keysA.length !== keysB.length) return false;
+    
+    for (let key of keysA) {
+        if (!keysB.includes(key)) return false;
+        if (!deepEqual(a[key], b[key])) return false;
+    }
+    
+    return true;
+}
+
+// Format value for display
+function formatValue(value) {
+    if (Array.isArray(value)) {
+        if (value.length === 1 && typeof value[0] !== 'object') {
+            return JSON.stringify(value[0]);
+        }
+        return JSON.stringify(value);
+    }
+    if (typeof value === 'object' && value !== null) {
+        return JSON.stringify(value);
+    }
+    return String(value);
 }
 
 // Reset code to starter
@@ -647,6 +835,26 @@ function setupEventListeners() {
     // Run button
     document.getElementById('run-btn').addEventListener('click', runCode);
 
+    // Test button
+    document.getElementById('test-btn').addEventListener('click', () => {
+        if (!currentProblem || !currentProblem.testCases) {
+            alert('No test cases available for this problem');
+            return;
+        }
+        
+        const code = document.getElementById('code-editor').value;
+        const consoleOutput = document.getElementById('console-output');
+        
+        // Save code
+        if (currentProblem) {
+            localStorage.setItem(`code_${currentProblem.id}`, code);
+        }
+        
+        // Clear console and run tests
+        consoleOutput.innerHTML = '';
+        runTests();
+    });
+
     // Reset button
     document.getElementById('reset-btn').addEventListener('click', resetCode);
 
@@ -733,6 +941,12 @@ function setupEventListeners() {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
             e.preventDefault();
             runCode();
+        }
+        
+        // Ctrl/Cmd + Shift + T to run tests
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'T') {
+            e.preventDefault();
+            document.getElementById('test-btn').click();
         }
         
         // Ctrl/Cmd + S to save

@@ -414,14 +414,30 @@ body {
 .console-line {
     margin-bottom: 5px;
     padding: 2px 0;
+    line-height: 1.6;
 }
 
 .console-line.error {
     color: var(--danger-color);
+    font-weight: 500;
 }
 
 .console-line.success {
     color: var(--success-color);
+    font-weight: 500;
+}
+
+/* Test results specific styling */
+.console-line.success::before {
+    content: '';
+    display: inline-block;
+    margin-right: 4px;
+}
+
+.console-line.error::before {
+    content: '';
+    display: inline-block;
+    margin-right: 4px;
 }
 
 /* Button Styles */
