@@ -527,6 +527,51 @@ body.no-scroll {
     min-height: 240px;
 }
 
+/* CodeMirror editor integration */
+.CodeMirror {
+    flex: 1;
+    height: 100%;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+.CodeMirror.cm-s-material-darker {
+    background: var(--bg-dark);
+}
+
+.CodeMirror-gutters {
+    background: var(--bg-light);
+    border-right: 1px solid var(--border-color);
+}
+
+.CodeMirror-linenumber {
+    color: var(--text-secondary);
+}
+
+.CodeMirror-cursor {
+    border-left: 2px solid var(--primary-color);
+}
+
+.CodeMirror-focused .CodeMirror-selected {
+    background: rgba(0, 122, 204, 0.2);
+}
+
+.CodeMirror-scroll {
+    padding: 12px 0;
+}
+
+/* Hide legacy line numbers when CodeMirror is active */
+.editor-wrapper.cm-active .line-numbers {
+    display: none;
+}
+
+.editor-wrapper.cm-active #code-editor {
+    display: none;
+}
+
 .line-numbers {
     background-color: var(--bg-light);
     color: var(--text-secondary);

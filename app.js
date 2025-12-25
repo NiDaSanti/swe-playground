@@ -568,6 +568,55 @@ let timerInterval = null;
 let timerSeconds = 0;
 let timerRunning = false;
 
+// Code editor instance (CodeMirror when available)
+let cmEditor = null;
+
+function getEditorValue() {
+    if (cmEditor) return cmEditor.getValue();
+    return document.getElementById('code-editor').value;
+}
+
+function setEditorValue(value) {
+    if (cmEditor) {
+        cmEditor.setValue(value);
+        cmEditor.refresh();
+        return;
+    }
+    const el = document.getElementById('code-editor');
+    el.value = value;
+    updateLineNumbers();
+}
+
+function initCodeEditor() {
+    const textarea = document.getElementById('code-editor');
+    const wrapper = textarea?.closest('.editor-wrapper');
+
+    // Progressive enhancement: use CodeMirror if loaded
+    if (window.CodeMirror && textarea) {
+        cmEditor = window.CodeMirror.fromTextArea(textarea, {
+            mode: 'javascript',
+            theme: 'material-darker',
+            lineNumbers: true,
+            indentUnit: 2,
+            tabSize: 2,
+            lineWrapping: false,
+            viewportMargin: Infinity,
+        });
+
+        if (wrapper) wrapper.classList.add('cm-active');
+
+        // Keep localStorage persistence consistent
+        cmEditor.on('change', () => {
+            if (currentProblem) {
+                localStorage.setItem(`code_${currentProblem.id}`, cmEditor.getValue());
+            }
+        });
+
+        // Improve scroll/height fit
+        setTimeout(() => cmEditor.refresh(), 0);
+    }
+}
+
 // Load completed problems from localStorage
 function loadProgress() {
     const saved = localStorage.getItem('completedProblems');
@@ -586,6 +635,7 @@ function init() {
     loadProgress();
     renderProblemsList();
     updateStats();
+    initCodeEditor();
     setupEventListeners();
 }
 
@@ -683,10 +733,7 @@ function loadProblem(problem) {
 
     // Load starter code
     const savedCode = localStorage.getItem(`code_${problem.id}`);
-    document.getElementById('code-editor').value = savedCode || problem.starterCode;
-
-    // Update line numbers
-    updateLineNumbers();
+    setEditorValue(savedCode || problem.starterCode);
 
     // Update active state in sidebar
     renderProblemsList();
@@ -697,7 +744,7 @@ function loadProblem(problem) {
 
 // Run the code
 function runCode() {
-    const code = document.getElementById('code-editor').value;
+    const code = getEditorValue();
     const consoleOutput = document.getElementById('console-output');
     consoleOutput.innerHTML = '';
 
@@ -911,7 +958,7 @@ function formatValue(value) {
 // Reset code to starter
 function resetCode() {
     if (currentProblem && confirm('Reset code to starter template?')) {
-        document.getElementById('code-editor').value = currentProblem.starterCode;
+        setEditorValue(currentProblem.starterCode);
         localStorage.removeItem(`code_${currentProblem.id}`);
         clearConsole();
     }
@@ -973,6 +1020,7 @@ function updateTimerDisplay() {
 
 // Line numbers
 function updateLineNumbers() {
+    if (cmEditor) return; // handled by CodeMirror
     const editor = document.getElementById('code-editor');
     const lineNumbers = document.getElementById('line-numbers');
     const lines = editor.value.split('\n').length;
@@ -986,7 +1034,7 @@ function saveCodeToFile() {
         return;
     }
     
-    const code = document.getElementById('code-editor').value;
+    const code = getEditorValue();
     const blob = new Blob([code], { type: 'text/javascript' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -1035,6 +1083,36 @@ function resetProgress() {
 
 // Toggle line comment
 function toggleComment() {
+    if (cmEditor) {
+        const doc = cmEditor.getDoc();
+        const from = doc.getCursor('from');
+        const to = doc.getCursor('to');
+        const selection = doc.getSelection();
+
+        // If nothing selected, toggle the current line
+        if (!selection) {
+            const line = doc.getLine(from.line);
+            if (line.trim().startsWith('//')) {
+                doc.replaceRange(line.replace(/^(\s*)\/\/\s?/, '$1'), { line: from.line, ch: 0 }, { line: from.line, ch: line.length });
+            } else {
+                doc.replaceRange('// ' + line, { line: from.line, ch: 0 }, { line: from.line, ch: line.length });
+            }
+            return;
+        }
+
+        const lines = selection.split('\n');
+        const allCommented = lines.every(l => l.trim() === '' || l.trim().startsWith('//'));
+        const newText = lines
+            .map(l => {
+                if (l.trim() === '') return l;
+                return allCommented ? l.replace(/^(\s*)\/\/\s?/, '$1') : l.replace(/^(\s*)/, '$1// ');
+            })
+            .join('\n');
+
+        doc.replaceRange(newText, from, to);
+        return;
+    }
+
     const editor = document.getElementById('code-editor');
     const start = editor.selectionStart;
     const end = editor.selectionEnd;
@@ -1166,12 +1244,14 @@ function setupEventListeners() {
         }
     });
 
-    // Code editor - update line numbers
+    // Code editor - update line numbers (textarea fallback only)
     const editor = document.getElementById('code-editor');
-    editor.addEventListener('input', updateLineNumbers);
-    editor.addEventListener('scroll', () => {
-        document.getElementById('line-numbers').scrollTop = editor.scrollTop;
-    });
+    if (!cmEditor && editor) {
+        editor.addEventListener('input', updateLineNumbers);
+        editor.addEventListener('scroll', () => {
+            document.getElementById('line-numbers').scrollTop = editor.scrollTop;
+        });
+    }
 
     // Difficulty filter
     document.getElementById('difficulty-filter').addEventListener('change', (e) => {
