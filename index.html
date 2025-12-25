@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nick's Code Playground | Interview Prep Platform</title>
+    <meta name="description" content="Interactive coding playground for technical interview preparation. Practice algorithms, data structures, and problem-solving.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🚀</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>🚀 Nick's Playground</h1>
+                <p class="subtitle">Master Your Interview Skills</p>
+            </div>
+
+            <div class="filter-section">
+                <label for="difficulty-filter">Difficulty:</label>
+                <select id="difficulty-filter">
+                    <option value="all">All</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                </select>
+            </div>
+
+            <div class="filter-section">
+                <label for="category-filter">Category:</label>
+                <select id="category-filter">
+                    <option value="all">All</option>
+                    <option value="String">String</option>
+                    <option value="Array">Array</option>
+                    <option value="Object">Object</option>
+                    <option value="Hash Map">Hash Map</option>
+                    <option value="Linked List">Linked List</option>
+                    <option value="Stack">Stack</option>
+                    <option value="Tree">Tree</option>
+                    <option value="Dynamic Programming">DP</option>
+                </select>
+            </div>
+
+            <div class="search-section">
+                <input type="text" id="search-input" placeholder="Search problems...">
+            </div>
+
+            <div class="problems-list" id="problems-list">
+                <!-- Problems will be dynamically loaded here -->
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Completed:</span>
+                    <span class="stat-value" id="completed-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total:</span>
+                    <span class="stat-value" id="total-count">0</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="reset-progress-btn" class="btn btn-sm btn-secondary" style="width: 100%;">
+                    Reset Progress
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="editor-container">
+                <!-- Problem Description -->
+                <div class="problem-section">
+                    <div class="problem-header">
+                        <h2 id="problem-title">Select a problem to start</h2>
+                        <div class="problem-meta">
+                            <span class="difficulty-badge" id="difficulty-badge"></span>
+                            <span class="pattern-badge" id="pattern-badge"></span>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-button active" data-tab="description">Description</button>
+                        <button class="tab-button" data-tab="examples">Examples</button>
+                        <button class="tab-button" data-tab="hints">Hints</button>
+                    </div>
+
+                    <div class="tab-content">
+                        <div id="description-tab" class="tab-pane active">
+                            <div id="problem-description">
+                                <p>Select a problem from the sidebar to see its description.</p>
+                            </div>
+                        </div>
+                        <div id="examples-tab" class="tab-pane">
+                            <div id="problem-examples">
+                                <p>Examples will appear here.</p>
+                            </div>
+                        </div>
+                        <div id="hints-tab" class="tab-pane">
+                            <div id="problem-hints">
+                                <p>Hints and approaches will appear here.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Editor -->
+                <div class="code-section">
+                    <div class="code-header">
+                        <h3>Your Solution</h3>
+                        <div class="code-actions">
+                            <button id="timer-btn" class="btn btn-secondary" title="Start timer">
+                                ⏱️ <span id="timer-display">00:00</span>
+                            </button>
+                            <button id="save-btn" class="btn btn-secondary" title="Save to file">💾 Save</button>
+                            <button id="reset-btn" class="btn btn-secondary">🔄 Reset</button>
+                            <button id="run-btn" class="btn btn-primary">▶ Run Code</button>
+                        </div>
+                    </div>
+                    <div class="editor-wrapper">
+                        <div class="line-numbers" id="line-numbers"></div>
+                        <textarea id="code-editor" placeholder="// Write your solution here..." spellcheck="false"></textarea>
+                    </div>
+                </div>
+
+                <!-- Output Console -->
+                <div class="console-section">
+                    <div class="console-header">
+                        <h3>Output</h3>
+                        <div class="console-actions">
+                            <span id="execution-time" class="execution-time"></span>
+                            <button id="copy-output-btn" class="btn btn-secondary btn-sm" title="Copy output">📋</button>
+                            <button id="clear-console" class="btn btn-secondary btn-sm">Clear</button>
+                        </div>
+                    </div>
+                    <div id="console-output" class="console-output">
+                        <p class="console-placeholder">Output will appear here when you run your code...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div id="shortcuts-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⌨️ Keyboard Shortcuts</h3>
+                <button class="modal-close" id="close-shortcuts">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl/Cmd + Enter</span>
+                    <span class="shortcut-desc">Run code</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl/Cmd + S</span>
+                    <span class="shortcut-desc">Save code to file</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl/Cmd + K</span>
+                    <span class="shortcut-desc">Clear console</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl/Cmd + /</span>
+                    <span class="shortcut-desc">Toggle comment</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Tab</span>
+                    <span class="shortcut-desc">Indent selected lines</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Shift + Tab</span>
+                    <span class="shortcut-desc">Unindent selected lines</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">?</span>
+                    <span class="shortcut-desc">Show this help</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Help Button -->
+    <button id="help-btn" class="floating-btn" title="Keyboard shortcuts (?)">
+        ❓
+    </button>
+
+    <script src="app.js"></script>
+</body>
+</html>
