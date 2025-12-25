@@ -313,6 +313,251 @@ console.log(isValid("(]")); // Expected: false`,
             { input: ["([)]"], expected: false },
             { input: ["{[]}"], expected: true }
         ]
+    },
+
+    // --- Super Easy Warmups ---
+    {
+        id: 'hello-name',
+        title: 'Hello, Name!',
+        difficulty: 'Easy',
+        category: 'String',
+        pattern: 'Basics',
+        description: 'Return a greeting string in the format: "Hello, <name>!"',
+        examples: `Input: "Nick"
+Output: "Hello, Nick!"
+
+Input: ""
+Output: "Hello, !"`,
+        hints: `Approach:
+1. Use string interpolation / concatenation
+2. Return the formatted string
+
+Time Complexity: O(n)
+Space Complexity: O(n)`,
+        starterCode: `function helloName(name) {
+  // Your solution here
+}
+
+// Test cases
+console.log(helloName("Nick")); // "Hello, Nick!"
+console.log(helloName("")); // "Hello, !"`,
+        testCases: [
+            { input: ["Nick"], expected: "Hello, Nick!" },
+            { input: ["Ada"], expected: "Hello, Ada!" },
+            { input: [""], expected: "Hello, !" }
+        ]
+    },
+    {
+        id: 'is-even',
+        title: 'Is Even',
+        difficulty: 'Easy',
+        category: 'Array',
+        pattern: 'Math',
+        description: 'Return true if the number is even, otherwise false.',
+        examples: `Input: 4
+Output: true
+
+Input: 7
+Output: false`,
+        hints: `Approach:
+Use modulus: n % 2 === 0
+
+Time Complexity: O(1)
+Space Complexity: O(1)`,
+        starterCode: `function isEven(n) {
+  // Your solution here
+}
+
+console.log(isEven(4)); // true
+console.log(isEven(7)); // false`,
+        testCases: [
+            { input: [4], expected: true },
+            { input: [7], expected: false },
+            { input: [0], expected: true },
+            { input: [-2], expected: true }
+        ]
+    },
+    {
+        id: 'sum-two',
+        title: 'Sum of Two Numbers',
+        difficulty: 'Easy',
+        category: 'Array',
+        pattern: 'Basics',
+        description: 'Return the sum of two numbers a and b.',
+        examples: `Input: a=2, b=3
+Output: 5
+
+Input: a=-1, b=1
+Output: 0`,
+        hints: `Approach:
+Return a + b
+
+Time Complexity: O(1)
+Space Complexity: O(1)`,
+        starterCode: `function sumTwo(a, b) {
+  // Your solution here
+}
+
+console.log(sumTwo(2, 3)); // 5
+console.log(sumTwo(-1, 1)); // 0`,
+        testCases: [
+            { input: [2, 3], expected: 5 },
+            { input: [-1, 1], expected: 0 },
+            { input: [0, 0], expected: 0 },
+            { input: [10, -4], expected: 6 }
+        ]
+    },
+    {
+        id: 'first-element',
+        title: 'First Element',
+        difficulty: 'Easy',
+        category: 'Array',
+        pattern: 'Basics',
+        description: 'Return the first element of the array. If the array is empty, return null.',
+        examples: `Input: [5, 6, 7]
+Output: 5
+
+Input: []
+Output: null`,
+        hints: `Approach:
+1. If array length is 0, return null
+2. Otherwise return arr[0]
+
+Time Complexity: O(1)
+Space Complexity: O(1)`,
+        starterCode: `function firstElement(arr) {
+  // Your solution here
+}
+
+console.log(firstElement([5,6,7])); // 5
+console.log(firstElement([])); // null`,
+        testCases: [
+            { input: [[5, 6, 7]], expected: 5 },
+            { input: [[]], expected: null },
+            { input: [["a"]], expected: "a" }
+        ]
+    },
+    {
+        id: 'last-element',
+        title: 'Last Element',
+        difficulty: 'Easy',
+        category: 'Array',
+        pattern: 'Basics',
+        description: 'Return the last element of the array. If the array is empty, return null.',
+        examples: `Input: [5, 6, 7]
+Output: 7
+
+Input: []
+Output: null`,
+        hints: `Approach:
+1. If array length is 0, return null
+2. Otherwise return arr[arr.length - 1]
+
+Time Complexity: O(1)
+Space Complexity: O(1)`,
+        starterCode: `function lastElement(arr) {
+  // Your solution here
+}
+
+console.log(lastElement([5,6,7])); // 7
+console.log(lastElement([])); // null`,
+        testCases: [
+            { input: [[5, 6, 7]], expected: 7 },
+            { input: [[]], expected: null },
+            { input: [["a"]], expected: "a" }
+        ]
+    },
+    {
+        id: 'count-vowels',
+        title: 'Count Vowels',
+        difficulty: 'Easy',
+        category: 'String',
+        pattern: 'Looping',
+        description: 'Return how many vowels (a, e, i, o, u) are in the string. Case-insensitive.',
+        examples: `Input: "hello"
+Output: 2
+
+Input: "WHY"
+Output: 0`,
+        hints: `Approach:
+1. Lowercase the string
+2. Loop over characters
+3. Count if char is in a set of vowels
+
+Time Complexity: O(n)
+Space Complexity: O(1)`,
+        starterCode: `function countVowels(s) {
+  // Your solution here
+}
+
+console.log(countVowels("hello")); // 2
+console.log(countVowels("WHY")); // 0`,
+        testCases: [
+            { input: ["hello"], expected: 2 },
+            { input: ["WHY"], expected: 0 },
+            { input: ["AeiOu"], expected: 5 },
+            { input: [""], expected: 0 }
+        ]
+    },
+    {
+        id: 'to-upper-case',
+        title: 'To Uppercase',
+        difficulty: 'Easy',
+        category: 'String',
+        pattern: 'Built-ins',
+        description: 'Return the string converted to uppercase.',
+        examples: `Input: "abc"
+Output: "ABC"
+
+Input: "Hello!"
+Output: "HELLO!"`,
+        hints: `Approach:
+Use s.toUpperCase()
+
+Time Complexity: O(n)
+Space Complexity: O(n)`,
+        starterCode: `function toUpperCaseString(s) {
+  // Your solution here
+}
+
+console.log(toUpperCaseString("abc")); // "ABC"
+console.log(toUpperCaseString("Hello!")); // "HELLO!"`,
+        testCases: [
+            { input: ["abc"], expected: "ABC" },
+            { input: ["Hello!"], expected: "HELLO!" },
+            { input: [""], expected: "" }
+        ]
+    },
+    {
+        id: 'clamp-number',
+        title: 'Clamp a Number',
+        difficulty: 'Easy',
+        category: 'Array',
+        pattern: 'Math',
+        description: 'Clamp a number n between min and max. If n is below min return min; if above max return max; otherwise return n.',
+        examples: `Input: n=5, min=0, max=10
+Output: 5
+
+Input: n=-2, min=0, max=10
+Output: 0`,
+        hints: `Approach:
+Use Math.min and Math.max:
+return Math.min(max, Math.max(min, n))
+
+Time Complexity: O(1)
+Space Complexity: O(1)`,
+        starterCode: `function clamp(n, min, max) {
+  // Your solution here
+}
+
+console.log(clamp(5, 0, 10)); // 5
+console.log(clamp(-2, 0, 10)); // 0`,
+        testCases: [
+            { input: [5, 0, 10], expected: 5 },
+            { input: [-2, 0, 10], expected: 0 },
+            { input: [99, 0, 10], expected: 10 },
+            { input: [10, 0, 10], expected: 10 }
+        ]
     }
 ];
 
