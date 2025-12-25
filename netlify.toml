@@ -11,12 +11,22 @@
     Referrer-Policy = "no-referrer-when-downgrade"
 
 [[headers]]
-  for = "/*.js"
+  for = "/index.html"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "no-cache"
 
 [[headers]]
-  for = "/*.css"
+  for = "/app.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/style.css"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
