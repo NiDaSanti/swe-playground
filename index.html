@@ -10,8 +10,20 @@
 </head>
 <body>
     <div class="container">
+        <!-- Mobile header -->
+        <header class="mobile-header" aria-label="Mobile header">
+            <button id="menu-btn" class="icon-btn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
+                ☰
+            </button>
+            <div class="mobile-title">Nick's Playground</div>
+            <div class="mobile-spacer"></div>
+        </header>
+
+        <!-- Mobile overlay -->
+        <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
+
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h1>🚀 Nick's Playground</h1>
                 <p class="subtitle">Master Your Interview Skills</p>

@@ -30,9 +30,63 @@ body {
     overflow: hidden;
 }
 
+/* Improve mobile viewport handling */
+@supports (height: 100dvh) {
+    body {
+        height: 100dvh;
+    }
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
 .container {
     display: flex;
     height: 100vh;
+}
+
+/* Mobile header (hidden on desktop) */
+.mobile-header {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-darker) 100%);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.mobile-title {
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+}
+
+.mobile-spacer {
+    flex: 1;
+}
+
+.icon-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 2px solid var(--border-color);
+    background: var(--bg-lighter);
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.sidebar-overlay {
+    display: none;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 900;
 }
 
 /* Sidebar Styles */
@@ -830,16 +884,97 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+    body {
+        overflow: auto;
+    }
+
+    .container {
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .mobile-header {
+        display: flex;
+        position: sticky;
+        top: 0;
+        z-index: 950;
+    }
+
+    .main-content {
+        overflow: visible;
+    }
+
+    .editor-container {
+        overflow: visible;
+    }
+
+    .problem-section {
+        max-height: none;
+    }
+
+    .console-section {
+        height: 220px;
+    }
+
     .sidebar {
-        width: 100%;
-        max-width: 280px;
-        position: absolute;
-        left: -280px;
+        width: min(320px, 86vw);
+        max-width: 320px;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-105%);
         z-index: 1000;
-        transition: left 0.3s;
+        transition: transform 0.25s ease;
     }
 
     .sidebar.open {
-        left: 0;
+        transform: translateX(0);
+    }
+
+    /* Give content breathing room on small screens */
+    .code-header,
+    .console-header {
+        padding: 12px 14px;
+    }
+
+    .tab-content {
+        padding: 14px;
+    }
+
+    .code-actions {
+        gap: 8px;
+    }
+
+    .code-actions .btn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    /* Keep editor usable */
+    .editor-wrapper {
+        min-height: 320px;
+    }
+
+    #code-editor {
+        font-size: 14px;
+    }
+
+    .floating-btn {
+        bottom: 16px;
+        right: 16px;
+        width: 54px;
+        height: 54px;
+    }
+}
+
+/* Tablet landscape / small laptop */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar {
+        width: 280px;
+    }
+
+    .problem-section {
+        max-height: 40%;
     }
 }
